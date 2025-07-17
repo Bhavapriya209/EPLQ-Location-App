@@ -1,0 +1,23 @@
+<!-- admin.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+</head>
+<body>
+  <h2>Upload POI</h2>
+  <input id="poi" placeholder="POI Name">
+  <input id="lat" placeholder="Latitude">
+  <input id="lng" placeholder="Longitude">
+  <button onclick="uploadPOI()">Upload</button>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+  <!-- Your Firebase Config and Logic -->
+  <script src="firebase.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

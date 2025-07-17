@@ -1,0 +1,31 @@
+<!-- user.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>User Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h2>User Login</h2>
+  <input id="email" placeholder="Email" type="email" />
+  <input id="password" placeholder="Password" type="password" />
+  <button onclick="loginUser()">Login</button>
+  <p id="loginStatus"></p>
+
+  <h3>Search POIs</h3>
+  <input id="radius" placeholder="Radius in km" />
+  <input id="userLat" placeholder="Your Latitude" />
+  <input id="userLng" placeholder="Your Longitude" />
+  <button onclick="searchPOIs()">Search</button>
+
+  <ul id="poiResults"></ul>
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="firebase.js"></script>
+  <script src="user.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>EPLQ Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Welcome to Chiri's EPLQ</h1>
+  <h2>Login</h2>
+
+  <input id="email" placeholder="Email" type="email" required>
+  <input id="password" placeholder="Password" type="password" required>
+  <button onclick="login()">Login</button>
+
+  <p>Don't have an account? <a href="register.html">Register</a></p>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="firebase.js"></script>
+
+  <script>
+    function login() {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      if (!email || !password) {
+        alert("Please enter both email and password.");
+        return;
+      }
+
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(() => {
+          alert('Login Successful');
+          window.location.href = "dashboard.html";  // redirect after login
+        })
+        .catch(error => alert("Error: " + error.message));
+    }
+  </script>
+</body>
+</html>

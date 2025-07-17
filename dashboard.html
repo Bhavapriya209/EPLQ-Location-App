@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h2>Upload POI</h2>
+  <input id="poi" placeholder="POI Name">
+  <input id="lat" placeholder="Latitude">
+  <input id="lng" placeholder="Longitude">
+  <button onclick="uploadPOI()">Upload</button>
+
+  <h2>Search Nearby POI</h2>
+  <input id="searchLat" placeholder="Your Latitude">
+  <input id="searchLng" placeholder="Your Longitude">
+  <input id="radius" placeholder="Radius (in km)">
+  <button onclick="searchPOI()">Search</button>
+
+  <div id="results"></div>
+
+  <!-- ✅ Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+  <!-- ✅ Your Firebase Config (from firebase.js) -->
+  <script src="firebase.js"></script>
+
+  <!-- ✅ Main Functionality Script -->
+  <script>
+    const R = 6371; // Earth radius in kilometers
+
+    function uploadPOI() {
+      const poi = document.getElementById('poi').value.trim();
+      const lat = parseFloat(document.getElementById('lat').value);
+      const lng = parseFloat(document.getElementById('lng').value);
+
+      if (!poi || isNaN(lat) || isNaN(lng)) {
+        alert("⚠️ Please enter valid POI name, latitude, and longitude.");
+        return;
+      }
+
+      db.collection("POIs").add({ poi, lat, lng })
+        .then(() => alert("✅ POI uploaded successfully"))
+        .catch(err => alert("❌ Upload failed: " + err.message));
+    }
+
+    function getDistance(lat1, lon1, lat2, lon2) {
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat / 2) ** 2 +
+                Math.cos(lat1 * Math.PI / 180) *
+                Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon / 2) ** 2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+
+    function searchPOI() {
+      const searchLat = parseFloat(document.getElementById('searchLat').value);
+      const searchLng = parseFloat(document.getElementById('searchLng').value);
+      const radius = parseFloat(document.getElementById('radius').value);
+
+      if (isNaN(searchLat) || isNaN(searchLng) || isNaN(radius)) {
+        alert("⚠️ Please enter valid search coordinates and radius.");
+        return;
+      }
+      
+
+      document.getElementById("results").innerHTML = "🔍 Searching...";
+
+      db.collection("POIs").get().then(snapshot => {
+        const found = [];
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const dist = getDistance(searchLat, searchLng, data.lat, data.lng);
+          console.log(`Checking: ${data.poi} ➤ Distance: ${dist.toFixed(2)} km`);
+          if (dist <= radius) {
+            found.push(`${data.poi} - ${dist.toFixed(2)} km`);
+          }
+        });
+
+        document.getElementById("results").innerHTML = found.length
+          ? found.join("<br>")
+          : "❌ No POIs found in this radius.";
+      }).catch(err => {
+        console.error("❌ Error getting POIs:", err);
+        document.getElementById("results").innerHTML = "❌ Error occurred.";
+      });
+    }
+  </script>
+</body>
+</html> 
+
+
+
